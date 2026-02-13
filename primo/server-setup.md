@@ -14,12 +14,12 @@ on your laptop via SSH X11 forwarding.
   - macOS: **XQuartz**
   - Linux: already has X11
 - Your laptop will connect with:
-  ```bash
+  ```
   ssh -Y <username>@<server_ip>
   ```
 
 ## Update the Server
-  ```bash
+  ```
 sudo apt update
 sudo apt upgrade -y
   ```
@@ -27,20 +27,21 @@ sudo apt upgrade -y
 ## Install Graphical Desktop (Xorg + LightDM)
 - This installs a minimal X11 desktop environment:
 
-  ```bash
+  ```
 sudo apt install -y xorg lightdm lightdm-gtk-greeter
   ```
+
 - LightDM will start a desktop session on the server’s :0 display.
 
 ## Enable SSH X11 Forwarding
 - Open the SSH configuration:
 
-  ```bash
+  ```
 sudo nano /etc/ssh/sshd_config
   ```
 - Ensure the following lines are present:
 
-  ```bash
+  ```
 AllowTcpForwarding yes
 X11Forwarding yes
 X11DisplayOffset 10
@@ -49,31 +50,31 @@ X11UseLocalhost yes
 
 - Save and restart:
 
-  ```bash
+  ```
 sudo systemctl restart sshd
   ```
 ## Install X11 Authentication Tools
 
-  ```bash
+  ```
 sudo apt install -y xauth
   ```
 ## Install Wine
 - Enable 32-bit support and install Wine:
 
-  ```bash
+  ```
 sudo dpkg --add-architecture i386
 su2do apt update
 sudo apt install -y wine wine64 wine32 winetricks
   ```
 - Verify:
 
-  ```bash
+  ```
 wine --version
   ```
 ## Create Wine Prefix for PRIMO
 - Configure a custom Wine environment:
 
-  ```bash
+  ```
 export WINEPREFIX="$HOME/.wine-primo"
 export WINEARCH=win64
 winecfg
@@ -83,7 +84,7 @@ winecfg
 ## Install PRIMO
 - Copy your PRIMO Windows installer to the server, then run:
 
-  ```bash
+  ```
 wine ~/path/to/PRIMO_installer.exe
   ```
 - Use the GUI installer to complete installation.
@@ -91,26 +92,26 @@ wine ~/path/to/PRIMO_installer.exe
 ## Add Launch Alias
 - Append the following to ~/.bashrc:
 
-  ```bash
+  ```
 # PRIMO Wine Settings
 export WINEPREFIX="$HOME/.wine-primo"
 export WINEARCH=win64
 alias start_primo='wine "$WINEPREFIX/drive_c/PRIMO/PRIMO.exe"
   ```
 
-  ```bash
+  ```
 source ~/.bashrc
   ```
 
 ## Run PRIMO
 - Connect from your laptop with:
 
-  ```bash
+  ```
 ssh -Y fysiker@<server_ip>
   ```
 - Then launch:
 
-  ```bash
+  ```
 start_primo
   ```
 - The PRIMO GUI should appear on your laptop screen.
