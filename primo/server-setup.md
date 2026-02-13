@@ -19,74 +19,103 @@ on your laptop via SSH X11 forwarding.
   ```
 
 ## Update the Server
+  ```bash
 sudo apt update
 sudo apt upgrade -y
-
+  ```
 
 ## Install Graphical Desktop (Xorg + LightDM)
-This installs a minimal X11 desktop environment:
+- This installs a minimal X11 desktop environment:
 
+  ```bash
 sudo apt install -y xorg lightdm lightdm-gtk-greeter
-LightDM will start a desktop session on the server’s :0 display.
+  ```
+- LightDM will start a desktop session on the server’s :0 display.
 
-3) Enable SSH X11 Forwarding
-Open the SSH configuration:
+## Enable SSH X11 Forwarding
+- Open the SSH configuration:
 
+  ```bash
 sudo nano /etc/ssh/sshd_config
-Ensure the following lines are present:
+  ```
+- Ensure the following lines are present:
 
+  ```bash
 AllowTcpForwarding yes
 X11Forwarding yes
 X11DisplayOffset 10
 X11UseLocalhost yes
-Save and restart:
+  ```
 
+- Save and restart:
+
+  ```bash
 sudo systemctl restart sshd
-4) Install X11 Authentication Tools
+  ```
+## Install X11 Authentication Tools
+
+  ```bash
 sudo apt install -y xauth
-5) Install Wine
-Enable 32-bit support and install Wine:
+  ```
+## Install Wine
+- Enable 32-bit support and install Wine:
 
+  ```bash
 sudo dpkg --add-architecture i386
-sudo apt update
+su2do apt update
 sudo apt install -y wine wine64 wine32 winetricks
-Verify:
+  ```
+- Verify:
 
+  ```bash
 wine --version
-6) Create Wine Prefix for PRIMO
-Configure a custom Wine environment:
+  ```
+## Create Wine Prefix for PRIMO
+- Configure a custom Wine environment:
 
+  ```bash
 export WINEPREFIX="$HOME/.wine-primo"
 export WINEARCH=win64
 winecfg
-A GUI should appear via X11 forwarding to configure Wine.
+  ```
+- A GUI should appear via X11 forwarding to configure Wine.
 
-7) Install PRIMO
-Copy your PRIMO Windows installer to the server, then run:
+## Install PRIMO
+- Copy your PRIMO Windows installer to the server, then run:
 
+  ```bash
 wine ~/path/to/PRIMO_installer.exe
-Use the GUI installer to complete installation.
+  ```
+- Use the GUI installer to complete installation.
 
-8) Add Launch Alias
-Append the following to ~/.bashrc:
+## Add Launch Alias
+- Append the following to ~/.bashrc:
 
+  ```bash
 # PRIMO Wine Settings
 export WINEPREFIX="$HOME/.wine-primo"
 export WINEARCH=win64
-alias start_primo='wine "$WINEPREFIX/drive_c/PRIMO/PRIMO.exe"'
-Reload:
+alias start_primo='wine "$WINEPREFIX/drive_c/PRIMO/PRIMO.exe"
+  ```
 
+  ```bash
 source ~/.bashrc
-9) Run PRIMO
-Connect from your laptop with:
+  ```
 
+## Run PRIMO
+- Connect from your laptop with:
+
+  ```bash
 ssh -Y fysiker@<server_ip>
-Then launch:
+  ```
+- Then launch:
 
+  ```bash
 start_primo
-The PRIMO GUI should appear on your laptop screen.
+  ```
+- The PRIMO GUI should appear on your laptop screen.
 
-Notes
-Ensure your SSH client allows X11 forwarding (-Y). 
+## Notes
+- Ensure your SSH client allows X11 forwarding (-Y). 
 
-Your local X server must be running before connecting.
+- Your local X server must be running before connecting.
