@@ -20,13 +20,12 @@ on your laptop via SSH X11 forwarding.
 
 ## Update the Server
   ```
-sudo apt update
-sudo apt upgrade -y
+    sudo apt update
+    sudo apt upgrade -y
   ```
 
 ## Install Graphical Desktop (Xorg + LightDM)
 - This installs a minimal X11 desktop environment:
-
   ```
 sudo apt install -y xorg lightdm lightdm-gtk-greeter
   ```
@@ -35,12 +34,11 @@ sudo apt install -y xorg lightdm lightdm-gtk-greeter
 
 ## Enable SSH X11 Forwarding
 - Open the SSH configuration:
-
   ```
 sudo nano /etc/ssh/sshd_config
   ```
-- Ensure the following lines are present:
 
+- Ensure the following lines are present:
   ```
 AllowTcpForwarding yes
 X11Forwarding yes
@@ -49,7 +47,6 @@ X11UseLocalhost yes
   ```
 
 - Save and restart:
-
   ```
 sudo systemctl restart sshd
   ```
@@ -59,21 +56,19 @@ sudo systemctl restart sshd
 sudo apt install -y xauth
   ```
 ## Install Wine
-- Enable 32-bit support and install Wine:
 
+- Enable 32-bit support and install Wine:
   ```
 sudo dpkg --add-architecture i386
 su2do apt update
 sudo apt install -y wine wine64 wine32 winetricks
   ```
 - Verify:
-
   ```
 wine --version
   ```
 ## Create Wine Prefix for PRIMO
 - Configure a custom Wine environment:
-
   ```
 export WINEPREFIX="$HOME/.wine-primo"
 export WINEARCH=win64
@@ -83,15 +78,14 @@ winecfg
 
 ## Install PRIMO
 - Copy your PRIMO Windows installer to the server, then run:
-
   ```
 wine ~/path/to/PRIMO_installer.exe
   ```
+
 - Use the GUI installer to complete installation.
 
 ## Add Launch Alias
 - Append the following to ~/.bashrc:
-
   ```
 # PRIMO Wine Settings
 export WINEPREFIX="$HOME/.wine-primo"
@@ -105,12 +99,10 @@ source ~/.bashrc
 
 ## Run PRIMO
 - Connect from your laptop with:
-
   ```
 ssh -Y fysiker@<server_ip>
   ```
 - Then launch:
-
   ```
 start_primo
   ```
