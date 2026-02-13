@@ -1,0 +1,54 @@
+# ===============================================
+# Ubuntu 24.04 Server — PRIMO via Wine with GUI
+# (SSH X11 Forwarding to local laptop)
+# ===============================================
+
+# 1) Update the Server
+sudo apt update
+sudo apt upgrade -y
+
+# 2) Install Xorg and LightDM
+sudo apt install -y xorg lightdm lightdm-gtk-greeter
+
+# 3) Enable SSH X11 Forwarding
+sudo sed -i 's/^#*AllowTcpForwarding.*/AllowTcpForwarding yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^#*X11Forwarding.*/X11Forwarding yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^#*X11DisplayOffset.*/X11DisplayOffset 10/' /etc/ssh/sshd_config
+sudo sed -i 's/^#*X11UseLocalhost.*/X11UseLocalhost yes/' /etc/ssh/sshd_config
+sudo systemctl restart sshd
+
+# 4) Install X11 Authentication Tools
+sudo apt install -y xauth
+
+# 5) Install Wine and Supporting Packages
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install -y wine wine64 wine32 winetricks
+wine --version
+
+# 6) Create a Wine Prefix for PRIMO
+export WINEPREFIX="$HOME/.wine-primo"
+export WINEARCH=win64
+winecfg
+
+# 7) Install PRIMO
+# Copy the PRIMO installer (e.g. PRIMO_installer.exe) to your home directory
+# Then run:
+wine ~/PRIMO_installer.exe
+
+# 8) Add a Launch Alias
+echo '
+# PRIMO Wine settings
+export WINEPREFIX="$HOME/.wine-primo"
+export WINEARCH=win64
+alias start_primo="wine \"$WINEPREFIX/drive_c/PRIMO/PRIMO.exe\""
+' >> ~/.bashrc
+source ~/.bashrc
+
+# 9) Running PRIMO with X11 Forwarding
+# On your laptop, start your local X server first
+# Then connect with:
+#   ssh -Y fysiker@<server_ip>
+# And run:
+start_primo
+
