@@ -1,0 +1,18 @@
+[!] topas 4.2.1
+
+[*] i have found docker image of topas here
+    - https://hub.docker.com/r/opentopas/opentopas
+
+[=] I have installed and run topas with docker
+    > sudo groupadd docker
+    > sudo usermod -aG docker ${USER}
+    - restarted the system
+    > docker pull opentopas/opentopas:v4.2.1
+    - installed correctly
+
+[=] then I created a test file
+    - and tried to run topas
+    - it started and then failed for Geant4 files
+    - obviously.
+
+
