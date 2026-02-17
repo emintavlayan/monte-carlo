@@ -1,0 +1,42 @@
+SYSTEM BIOS > SATA Settings
+- Embedded SATA: AHCI Mode
+- Security Freeze Lock: 		Enabled
+- Write Cache: 				Enabled
+- Port A: 				Auto (Samsung SM871 SSD)
+- Port B / Port C: 			Auto
+
+SYSTEM BIOS > Processor Settings
+- Logical Processor (Hyper-Threading): 	ENABLED
+- QPI Speed: 				Maximum data rate
+- Alternate RTID: 			Disabled
+- Virtualization Technology (VT-x): 	Enabled
+- Address Translation Services (ATS): 	Disabled
+- Adjacent Cache Line Prefetch: 	Enabled
+- Hardware Prefetcher: 			Enabled
+- DCU Streamer Prefetcher: 		Enabled
+- DCU IP Prefetcher: 			Enabled
+- Logical Processor Idling: 		Disabled
+- Configurable TDP: 			Nominal
+- x2APIC Mode: 				ENABLED
+
+SYSTEM BIOS > Memory Settings
+- System Memory: 			64 GB ECC DDR4 @ 2133 MHz
+- System Memory Testing: 		Disabled
+- Memory Operating Mode: 		Optimizer Mode
+- Node Interleaving: 			Disabled
+- Snoop Mode: 				HOME SNOOP
+- Video Memory: 			16 MB
+
+SYSTEM BIOS > System Profile Settings
+- System Profile: 			Performance
+- CPU Power Management: 		Maximum Performance
+- Memory Frequency: 			Maximum Performance
+- Turbo Boost: 				Enabled
+- Energy Efficient Turbo: 		Disabled
+- C1E: 					Disabled
+- C States: 				Disabled
+- Collaborative CPU Performance Control: Disabled
+- Memory Patrol Scrub: 			Standard
+- Memory Refresh Rate: 			1x
+- Uncore Frequency: 			Maximum
+- Energy Efficient Policy: 		Performance

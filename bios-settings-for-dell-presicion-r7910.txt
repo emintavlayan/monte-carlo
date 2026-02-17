@@ -1,0 +1,139 @@
+Dell Precision R7910 Server BIOS Settings
+(Reality-based configuration for maximum Geant4/TOPAS throughput on a dual-socket rack workstation)
+
+Context assumptions:
+- Dell Precision R7910 (dual-socket Xeon E5 v3/v4 era)
+- Linux-based HPC / compute node
+- Geant4 / TOPAS Monte Carlo: CPU-bound, throughput-oriented, long-running jobs
+- Rack-style workstation: sustained thermals, no aggressive power saving desired
+
+
+SYSTEM BIOS > SATA Settings
+- Embedded SATA: AHCI Mode
+  # Correct. Simple, low-overhead path for a single SSD. Disk I/O is not a Geant4 bottleneck.
+
+- Security Freeze Lock: Enabled
+  # Irrelevant to performance. Fine to leave enabled.
+
+- Write Cache: Enabled
+  # Correct. Helps I/O bursts (output, phase space files). Use a UPS in a rack environment.
+
+- Port A: Auto (Samsung SM871 SSD)
+  # Fine. SSD performance is sufficient for Geant4 workloads.
+
+- Port B / Port C: Auto
+  # No impact unless devices are present.
+
+
+SYSTEM BIOS > Processor Settings
+- Logical Processor (Hyper-Threading): ENABLED
+  # Reality: Geant4 can benefit from SMT, but gains are modest and workload-dependent.
+  # On dual-socket Xeons, enabling HT often improves total histories/day slightly.
+  # Final answer is empirical, but ENABLED is the reasonable default.
+
+- QPI Speed: Maximum data rate
+  # Correct. Reduces inter-socket penalty, important on dual-socket R7910.
+
+- Alternate RTID: Disabled
+  # Fine. No relevance to Geant4.
+
+- Virtualization Technology (VT-x): ENABLED
+  # Chosen specifically because it unlocks x2APIC on this BIOS.
+  # VT-x has ~zero impact on bare-metal Geant4 performance when not running VMs.
+
+- Address Translation Services (ATS): Disabled
+  # Fine. ATS is irrelevant without IOMMU-heavy PCIe devices (not used by Geant4 CPU runs).
+
+- Adjacent Cache Line Prefetch: ENABLED
+  # Important correction.
+  # Geant4 is NOT purely random access: geometry navigation, physics tables, and stacks
+  # benefit from spatial locality. Disabling this often hurts throughput.
+
+- Hardware Prefetcher: Enabled
+  # Correct. Generally beneficial for Geant4’s mixed access patterns.
+
+- DCU Streamer Prefetcher: Enabled
+  # Correct. Helps tight loops and sequential access.
+
+- DCU IP Prefetcher: Enabled
+  # Correct. Helps pointer-heavy but structured code paths common in Geant4.
+
+- Logical Processor Idling: Disabled
+  # Correct for a rack system running continuous workloads.
+  # Avoids latency and frequency ramp delays.
+
+- Configurable TDP: Nominal
+  # Correct and stable for sustained workloads.
+  # “Maximum” can throttle under long runs if cooling headroom is marginal.
+
+- x2APIC Mode: ENABLED
+  # Correct.
+  # Even below 256 logical CPUs, x2APIC improves interrupt scalability and reduces jitter
+  # on multi-core, SMT-enabled systems.
+
+
+SYSTEM BIOS > Memory Settings
+- System Memory: 64 GB ECC DDR4 @ 2133 MHz
+  # Fine. Capacity and ECC are appropriate for long Monte Carlo runs.
+
+- System Memory Testing: Disabled
+  # Boot-time only. No runtime impact.
+
+- Memory Operating Mode: Optimizer Mode
+  # Correct. Performance-oriented memory configuration.
+
+- Node Interleaving: Disabled
+  # Correct and important.
+  # Preserves NUMA locality. Geant4 scales better when threads allocate local memory.
+  # Rack servers benefit from NUMA-aware scheduling.
+
+- Snoop Mode: HOME SNOOP
+  # Important correction.
+  # For throughput-oriented, mostly read-local workloads like Geant4,
+  # Home Snoop provides better sustained bandwidth than Early Snoop.
+  # Early Snoop favors latency, not total throughput.
+
+- Video Memory: 16 MB
+  # Irrelevant.
+
+
+SYSTEM BIOS > System Profile Settings
+- System Profile: Performance
+  # Correct baseline for a rack compute node.
+
+- CPU Power Management: Maximum Performance
+  # Correct. Prevents frequency throttling.
+
+- Memory Frequency: Maximum Performance
+  # Correct. Memory bandwidth matters for parts of Geant4.
+
+- Turbo Boost: Enabled
+  # Critical. Improves both single-thread and all-core performance.
+
+- Energy Efficient Turbo: Disabled
+  # Correct. Avoids power-biased turbo behavior.
+
+- C1E: Disabled
+  # Correct. Avoids idle-state latency.
+
+- C States: Disabled
+  # Correct. Rack server running continuous jobs should not enter deep idle states.
+
+- Collaborative CPU Performance Control: Disabled
+  # Correct. Keeps performance policy in BIOS, not OS heuristics.
+
+- Memory Patrol Scrub: Standard
+  # Balanced choice.
+  # Disabling can give small speedups, but for scientific / medical workloads,
+  # Standard is appropriate for reliability on long runs.
+
+- Memory Refresh Rate: 1x
+  # Correct. Lowest refresh overhead, best bandwidth.
+
+- Uncore Frequency: Maximum
+  # Correct. Improves memory controller and interconnect performance.
+
+- Energy Efficient Policy: Performance
+  # Correct. Aligns all platform logic toward throughput.
+
+
