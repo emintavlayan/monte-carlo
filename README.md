@@ -2,8 +2,6 @@
 
 ### server setup ###
 
-### primo ###
-
 ### topas ###
 
 
